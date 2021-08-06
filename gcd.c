@@ -1,4 +1,4 @@
-// program of selection sort using recursion
+// program for calculating gcd using recursion
 // Author Name - Jashu Bhardwaj
 // Date - 04/08/2021
 
