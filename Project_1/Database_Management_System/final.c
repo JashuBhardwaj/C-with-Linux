@@ -11,6 +11,9 @@ struct student {
     char phoneno[11];
     int rollno;
     char branch[30];
+    int maths,eng,cse,sci;
+    float res;
+    char grade;
 
 }s;
 
@@ -47,10 +50,34 @@ bool validation(char phone[11]) {
 
 }
 
+char grade_calc(float per) {
+
+    if(per >= 90) {
+        return 'A';
+    }
+    else if(per < 90 && per >= 80) {
+        return 'B';
+    }
+    else if(per < 80 && per >= 70) {
+        return 'C';
+    }
+    else if(per < 60 && per >= 33) {
+        return 'D';
+    }
+    else{
+        return 'F';
+    }
+
+
+
+}
+
 
 // function for inserting new record
 void insert() {
 
+
+    system("cls");
 
     // opening file using file pointer
     // opening it for appending data
@@ -59,32 +86,54 @@ void insert() {
     // removing the data stored in buffer
     fflush(stdin);
 
-    printf("Enter Student name : ");
+    int sum = 0;
+    float per = 0;
+
+    printf("\n\n\n\t\t\t\t\t<<==========STUDENT INFORMATION==========>>\n");
+    printf("\n\t\t\t\t\t--------------------------------------------\n");
+    printf("\n\t\t\t\t\tEnter Student name : ");
     gets(s.name);
     fflush(stdin);
-    printf("Enter Phone No : ");
+    printf("\n\t\t\t\t\tEnter Phone No : ");
     gets(s.phoneno);
 
     while(!validation(s.phoneno)) {
-        printf("Invalid Phone No!!!\n");
-        printf("Enter again \n");
+        printf("\n\t\t\t\t\tInvalid Phone No!!!\n");
+        printf("\n\t\t\t\t\tEnter again \n");
         fflush(stdin);
-        printf("Enter Phone No : ");
+        printf("\n\t\t\t\t\tEnter Phone No : ");
         gets(s.phoneno);
     }
     fflush(stdin);
-    printf("Enter Rollno : ");
+    printf("\n\t\t\t\t\tEnter Rollno : ");
     scanf("%d", &s.rollno);
     fflush(stdin);
-    printf("Enter Branch : ");
+    printf("\n\t\t\t\t\tEnter Branch : ");
     gets(s.branch);
     fflush(stdin);
+    printf("\n\t\t\t\t\tEnter Marks of Maths out of 100 : ");
+    scanf("%d", &s.maths);
+    fflush(stdin);
+    printf("\n\t\t\t\t\tEnter Marks of English out of 100 : ");
+    scanf("%d", &s.eng);
+    fflush(stdin);
+    printf("\n\t\t\t\t\tEnter Marks of Computer out of 100 : ");
+    scanf("%d", &s.cse);
+    fflush(stdin);
+    printf("\n\t\t\t\t\tEnter Marks of Science out of 100 : ");
+    scanf("%d", &s.sci);
+    fflush(stdin);
 
+    sum = s.maths + s.eng + s.cse + s.sci;
+    per = ((float)sum / 400) * 100;
+    s.res = per;
+
+    s.grade = grade_calc(per);
 
     // writing the data in file after
     // getting it from user
     fwrite(&s, sizeofstd, 1, ptr);
-    printf("Record saved successfully !\n");
+    printf("\n\t\t\t\t\tRecord saved successfully !\n");
 
     fflush(stdin);
 
@@ -102,22 +151,24 @@ void display() {
     int i =1;
     ptr = fopen("student.txt", "rb");
 
+    printf("\n\n\n\t\t\t\t\t<<==========STUDENT INFORMATION==========>>\n");
+    printf("\n\t\t\t\t\t--------------------------------------------\n");
+
     if(ptr == NULL) {
-        printf("File not present");
+        printf("\n\t\t\t\t\tFile not present");
         exit(0);
     }
 
-    printf("\n<<==========STUDENT INFORMATION==========>>\n");
 
-    printf("\n%-10s%-30s%-20s%-10s%-10s\n","S.NO", "STUDENT NAME", "PHONE NO", "ROLL NO", "BRANCH");
-    printf("--------------------------------------------------------------------------------\n");
+    printf("\n%-10s%-30s%-23s%-15s%-15s%-20s%-10s\n","S.NO", "STUDENT NAME", "PHONE NO", "ROLL NO", "BRANCH", "PERCENTAGE", "GRADE");
+    printf("----------------------------------------------------------------------------------------------------------------------\n");
 
 
     // reading the file
     // until end of file
     while(fread(&s, sizeofstd, 1, ptr) == 1) {
 
-        printf("%-10d %-30s %-20s %-10d %-10s\n", i, s.name, s.phoneno, s.rollno, s.branch);
+        printf("%-10d %-29s %-22s %-15d %-14s %-16.2f %-10c\n\n", i, s.name, s.phoneno, s.rollno, s.branch, s.res, s.grade);
         i++;
     }
 
@@ -136,14 +187,17 @@ void search_by_rollno() {
     int i = 1;
 
 
+    system("cls");
+    printf("\n\n\n\t\t\t\t\t<<==========STUDENT INFORMATION==========>>\n");
+    printf("\n\t\t\t\t\t--------------------------------------------\n");
     // getting the rollno from user to search
-    printf("Enter Roll No to search : ");
+    printf("\n\t\t\t\t\tEnter Roll No to search : ");
     scanf("%d", &rno);
 
     ptr = fopen("student.txt", "rb");
 
-    printf("\n%-10s%-30s%-20s%-10s%-10s\n", "S.NO", "STUDENT NAME", "PHONE NO", "ROLL NO", "BRANCH");
-    printf("--------------------------------------------------------------------------------\n");
+    printf("\n%-10s%-30s%-20s%-15s%-15s%-20s%-10s\n","S.NO", "STUDENT NAME", "PHONE NO", "ROLL NO", "BRANCH", "PERCENTAGE", "GRADE");
+    printf("----------------------------------------------------------------------------------------------------------------------\n");
 
     // reading the file until EOF
     while(fread(&s, sizeofstd, 1, ptr) == 1) {
@@ -151,7 +205,7 @@ void search_by_rollno() {
         // if the record rollno is equal to the searched no
         // display the content of that student
         if(rno == s.rollno) {
-            printf("%-10d%-30s %-20s %-10d %-10s\n", i, s.name, s.phoneno, s.rollno, s.branch);
+            printf("%-10d %-30s %-20s %-15d %-15s %-20.2f %-10c\n\n", i, s.name, s.phoneno, s.rollno, s.branch, s.res, s.grade);
             i++;
             found = 1;
             break;
@@ -160,11 +214,11 @@ void search_by_rollno() {
     }
 
     if(found == 1){
-        printf("\nRecord Found...\n\n");
+        printf("\n\t\t\t\t\tRecord Found...\n\n");
 
     }
     else {
-        printf("\nRecord Not Found !!!\n\n");
+        printf("\n\t\t\t\t\tRecord Not Found !!!\n\n");
     }
 
     fclose(ptr);
@@ -180,21 +234,24 @@ void search_by_name() {
     int i = 1;
     fflush(stdin);
 
+    system("cls");
+    printf("\n\n\n\t\t\t\t\t<<==========STUDENT INFORMATION==========>>\n");
+    printf("\n\t\t\t\t\t--------------------------------------------\n");
     // getting the name from user to search
-    printf("Enter Name of student : ");
+    printf("\n\t\t\t\t\tEnter Name of student : ");
     gets(name);
 
     ptr = fopen("student.txt", "rb");
 
-    printf("\n%-10s%-30s%-20s%-10s%-10s\n", "S.NO", "STUDENT NAME", "PHONE NO", "ROLL NO", "BRANCH");
-    printf("--------------------------------------------------------------------------------\n");
+    printf("\n%-10s%-30s%-20s%-15s%-15s%-20s%-10s\n","S.NO", "STUDENT NAME", "PHONE NO", "ROLL NO", "BRANCH", "PERCENTAGE", "GRADE");
+    printf("----------------------------------------------------------------------------------------------------------------------\n");
 
     while(fread(&s, sizeofstd, 1, ptr) == 1) {
 
         // you can use strcmpi , it ignores the case sensitivity while comapiring
         // you can campare Jashu with jashu , result will be found
         if(strcmp(name,s.name) == 0) {
-            printf("%-10d%-30s %-20s %-10d %-10s\n", i, s.name, s.phoneno, s.rollno, s.branch);
+            printf("%-10d %-30s %-20s %-15d %-15s %-20.2f %-10c\n\n", i, s.name, s.phoneno, s.rollno, s.branch, s.res, s.grade);
             i++;
             found = 1;
             break;
@@ -205,10 +262,10 @@ void search_by_name() {
     }
 
     if(found == 1) {
-        printf("\nRecord Found...\n\n");
+        printf("\n\t\t\t\t\tRecord Found...\n\n");
     }
     else {
-        printf("\nRecord Not Found !!!\n\n");
+        printf("\n\t\t\t\t\tRecord Not Found !!!\n\n");
     }
 
     fclose(ptr);
@@ -225,19 +282,22 @@ void search_by_phoneno() {
 
     fflush(stdin);
 
-    printf("Enter Phone_no of student : ");
+    system("cls");
+    printf("\n\n\n\t\t\t\t\t<<==========STUDENT INFORMATION==========>>\n");
+    printf("\n\t\t\t\t\t--------------------------------------------\n");
+    printf("\n\t\t\t\t\tEnter Phone_no of student : ");
     gets(pno);
 
     ptr = fopen("student.txt", "rb");
 
-    printf("\n%-10s%-30s%-20s%-10s%-10s\n", "S.NO", "STUDENT NAME", "PHONE NO", "ROLL NO", "BRANCH");
-    printf("--------------------------------------------------------------------------------\n");
+    printf("\n%-10s%-30s%-20s%-15s%-15s%-20s%-10s\n","S.NO", "STUDENT NAME", "PHONE NO", "ROLL NO", "BRANCH", "PERCENTAGE", "GRADE");
+    printf("----------------------------------------------------------------------------------------------------------------------\n");
 
     while(fread(&s, sizeofstd, 1, ptr) == 1) {
 
         // compairing the phone no to search
         if(strcmp(pno,s.phoneno) == 0) {
-            printf("%-10d%-30s %-20s %-10d %-10s\n", i, s.name, s.phoneno, s.rollno, s.branch);
+            printf("%-10d %-30s %-20s %-15d %-15s %-20.2f %-10c\n\n", i, s.name, s.phoneno, s.rollno, s.branch, s.res, s.grade);
             i++;
             found = 1;
             break;
@@ -248,10 +308,10 @@ void search_by_phoneno() {
     }
 
     if(found == 1) {
-        printf("\nRecord Found...\n\n");
+        printf("\n\t\t\t\t\tRecord Found...\n\n");
     }
     else {
-        printf("\nRecord Not Found !!!\n\n");
+        printf("\n\t\t\t\t\tRecord Not Found !!!\n\n");
     }
 
     fclose(ptr);
@@ -271,13 +331,15 @@ void search() {
     while(1) {
 
         system("cls");
-        printf("Enter how to search : \n");
-        printf("-----------------------\n");
-        printf("1. Search by Roll No\n");
-        printf("2. Search by Name \n");
-        printf("3. Search by Phone No \n");
-        printf("0. Back to main menu \n");
-        printf("Enter choice : ");
+        printf("\n\n\n\t\t\t\t\t<<==========STUDENT INFORMATION==========>>\n");
+        printf("\n\t\t\t\t\t--------------------------------------------\n");
+        printf("\n\t\t\t\t\tEnter how to search : \n");
+        printf("\n\t\t\t\t\t-----------------------\n");
+        printf("\n\t\t\t\t\t1. Search by Roll No\n");
+        printf("\n\t\t\t\t\t2. Search by Name \n");
+        printf("\n\t\t\t\t\t3. Search by Phone No \n");
+        printf("\n\t\t\t\t\t0. Back to main menu \n");
+        printf("\n\t\t\t\t\tEnter choice : ");
         scanf("%d", &option);
 
         switch(option){
@@ -299,7 +361,7 @@ void search() {
                 break;
 
         }
-        printf("Press any key to continue....");
+        printf("\n\t\t\t\t\tPress any key to continue....");
         getch();
 
 
@@ -313,8 +375,13 @@ void modify() {
 
     int rno = 0;
     int modified = 0;
+    int sum = 0;
+    float per = 0;
 
-    printf("Enter Roll No to Modify : ");
+    system("cls");
+    printf("\n\n\n\t\t\t\t\t<<==========STUDENT INFORMATION==========>>\n");
+    printf("\n\t\t\t\t\t--------------------------------------------\n");
+    printf("\n\t\t\t\t\tEnter Roll No to Modify : ");
     scanf("%d", &rno);
 
     ptr = fopen("student.txt", "rb+");
@@ -322,20 +389,46 @@ void modify() {
     while(fread(&s, sizeofstd, 1, ptr) == 1) {
 
         if(rno == s.rollno) {
-            printf("\nRecord Found...\n\n");
+            printf("\n\t\t\t\t\tRecord Found...\n\n");
             fflush(stdin);
-            printf("Enter Student name : ");
+            printf("\n\t\t\t\t\tEnter Student name : ");
             gets(s.name);
             fflush(stdin);
-            printf("Enter Phone No : ");
+            printf("\n\t\t\t\t\tEnter Phone No : ");
             gets(s.phoneno);
+
+            while(!validation(s.phoneno)) {
+                printf("\n\t\t\t\t\tInvalid Phone No!!!\n");
+                printf("\n\t\t\t\t\tEnter again \n");
+                fflush(stdin);
+                printf("\n\t\t\t\t\tEnter Phone No : ");
+                gets(s.phoneno);
+            }
             fflush(stdin);
-            printf("Enter Rollno : ");
+            printf("\n\t\t\t\t\tEnter Rollno : ");
             scanf("%d", &s.rollno);
             fflush(stdin);
-            printf("Enter Branch : ");
+            printf("\n\t\t\t\t\tEnter Branch : ");
             gets(s.branch);
             fflush(stdin);
+            printf("\n\t\t\t\t\tEnter Marks of Maths out of 100 : ");
+            scanf("%d", &s.maths);
+            fflush(stdin);
+            printf("\n\t\t\t\t\tEnter Marks of English out of 100 : ");
+            scanf("%d", &s.eng);
+            fflush(stdin);
+            printf("\n\t\t\t\t\tEnter Marks of Computer out of 100 : ");
+            scanf("%d", &s.cse);
+            fflush(stdin);
+            printf("\n\t\t\t\t\tEnter Marks of Science out of 100 : ");
+            scanf("%d", &s.sci);
+            fflush(stdin);
+
+            sum = s.maths + s.eng + s.cse + s.sci;
+            per = ((float) sum / 400) * 100;
+            s.res = per;
+
+            s.grade = grade_calc(per);
 
             // as the file pointer automatically increments
             // so bringing it back to the previous record
@@ -351,11 +444,11 @@ void modify() {
     }
 
     if(modified == 1){
-        printf("\nRecord Updated...\n\n");
+        printf("\n\t\t\t\t\tRecord Updated...\n\n");
 
     }
     else {
-        printf("\nRecord Not Found !!!\n\n");
+        printf("\n\t\t\t\t\tRecord Not Found !!!\n\n");
     }
 
 }
@@ -367,7 +460,10 @@ void delete_record(){
 
     int del = 0;
 
-    printf("Enter Roll No to Delete : ");
+    system("cls");
+    printf("\n\n\n\t\t\t\t\t<<==========STUDENT INFORMATION==========>>\n");
+    printf("\n\t\t\t\t\t--------------------------------------------\n");
+    printf("\n\t\t\t\t\tEnter Roll No to Delete : ");
     scanf("%d", &rno);
 
     FILE *temp;
@@ -402,12 +498,12 @@ void delete_record(){
     rename("second.txt", "student.txt");
 
     if(del == 1) {
-        printf("\nRecord Deleted Successfully\n\n");
+        printf("\n\t\t\t\t\tRecord Deleted Successfully\n\n");
 
     }
 
     else{
-        printf("\nRecord not present\n\n");
+        printf("\n\t\t\t\t\tRecord not present\n\n");
     }
 
 
@@ -460,11 +556,11 @@ void sort() {
     }
 
 
-    printf("\n%-10s%-30s%-20s%-10s%-10s\n", "S.NO", "STUDENT NAME", "PHONE NO", "ROLL NO", "BRANCH");
-    printf("--------------------------------------------------------------------------------\n");
+    printf("\n%-10s%-30s%-20s%-15s%-15s%-20s%-10s\n","S.NO", "STUDENT NAME", "PHONE NO", "ROLL NO", "BRANCH", "PERCENTAGE", "GRADE");
+    printf("----------------------------------------------------------------------------------------------------------------------\n");
 
     for(int i = 0; i < c; i++) {
-        printf("%-10d%-30s %-20s %-10d %-10s\n", k, stu[i].name, stu[i].phoneno, stu[i].rollno, stu[i].branch);
+        printf("%-10d %-30s %-20s %-15d %-15s %-20.2f %-10c\n\n", k, stu[i].name, stu[i].phoneno, stu[i].rollno, stu[i].branch, stu[i].res, stu[i].grade);
         k++;
     }
 
@@ -481,16 +577,17 @@ int main() {
     while(1){
 
         system("cls");
-        printf("Enter Option \n");
-        printf("--------------------\n");
-        printf("1. Add Record\n");
-        printf("2. Display Record\n");
-        printf("3. Search Record\n");
-        printf("4. Modify Record\n");
-        printf("5. Delete Record\n");
-        printf("6. Sort Record\n");
-        printf("0. Exit\n");
+        printf("\n\n\n\t\t\t\t\t<<==========STUDENT INFORMATION==========>>\n");
+        printf("\n\t\t\t\t\t--------------------------------------------\n");
+        printf("\n\t\t\t\t\t1. Add Record\n");
+        printf("\n\t\t\t\t\t2. Display Record\n");
+        printf("\n\t\t\t\t\t3. Search Record\n");
+        printf("\n\t\t\t\t\t4. Modify Record\n");
+        printf("\n\t\t\t\t\t5. Delete Record\n");
+        printf("\n\t\t\t\t\t6. Sort Record\n");
+        printf("\n\t\t\t\t\t0. Exit\n");
 
+        printf("\n\n\n\t\t\t\t\tEnter Option : ");
         scanf("%d", &option);
 
 
@@ -522,7 +619,7 @@ int main() {
 
         }
 
-        printf("Press any key to continue.....");
+        printf("\n\n\n\t\t\t\t\tPress any key to continue.....");
         getch();
 
     }
