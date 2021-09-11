@@ -42,7 +42,41 @@ bool validation(char phone[11]) {
     }
 
     // length should not exceed 10 digits
-    if(c > 10) {
+    if(c > 10 || c < 10) {
+        return false;
+    }
+
+    return true;
+
+}
+
+bool name_validation(char name[50]) {
+
+    if(name[0] >= 'A' && name[0] <= 'Z') {
+
+            for(int i = 1; name[i] != '\0'; i++) {
+
+                if(((name[i] >= 'a' && name[i] <= 'z') || (name[i] >= 'A' && name[i] <= 'Z')) || name[i] == ' ') {
+                    continue;
+                }
+                else {
+                    return false;
+                }
+
+            }
+
+            return true;
+
+    }
+
+    return false;
+
+
+}
+
+bool marks_validator(int num) {
+
+    if(num < 0 || num > 100) {
         return false;
     }
 
@@ -61,7 +95,7 @@ char grade_calc(float per) {
     else if(per < 80 && per >= 70) {
         return 'C';
     }
-    else if(per < 60 && per >= 33) {
+    else if(per < 70 && per >= 33) {
         return 'D';
     }
     else{
@@ -93,6 +127,15 @@ void insert() {
     printf("\n\t\t\t\t\t--------------------------------------------\n");
     printf("\n\t\t\t\t\tEnter Student name : ");
     gets(s.name);
+    while(!name_validation(s.name)) {
+
+        printf("\n\t\t\t\t\tInvalid Name !!!\n");
+        printf("\n\t\t\t\t\tEnter again \n");
+        fflush(stdin);
+        printf("\n\t\t\t\t\tEnter Student name : ");
+        gets(s.name);
+
+    }
     fflush(stdin);
     printf("\n\t\t\t\t\tEnter Phone No : ");
     gets(s.phoneno);
@@ -113,15 +156,50 @@ void insert() {
     fflush(stdin);
     printf("\n\t\t\t\t\tEnter Marks of Maths out of 100 : ");
     scanf("%d", &s.maths);
+
+    while(!marks_validator(s.maths)) {
+        printf("\n\t\t\t\t\tInvalid marks ...\n");
+        printf("\n\t\t\t\t\tEnter marks again\n");
+        fflush(stdin);
+        printf("\n\t\t\t\t\tEnter Marks of Maths out of 100 : ");
+        scanf("%d", &s.maths);
+    }
     fflush(stdin);
+
     printf("\n\t\t\t\t\tEnter Marks of English out of 100 : ");
     scanf("%d", &s.eng);
+
+    while(!marks_validator(s.eng)) {
+        printf("\n\t\t\t\t\tInvalid marks ...\n");
+        printf("\n\t\t\t\t\tEnter marks again\n");
+        fflush(stdin);
+        printf("\n\t\t\t\t\tEnter Marks of English out of 100 : ");
+        scanf("%d", &s.eng);
+    }
     fflush(stdin);
+
     printf("\n\t\t\t\t\tEnter Marks of Computer out of 100 : ");
     scanf("%d", &s.cse);
+
+    while(!marks_validator(s.cse)) {
+        printf("\n\t\t\t\t\tInvalid marks ...\n");
+        printf("\n\t\t\t\t\tEnter marks again\n");
+        fflush(stdin);
+        printf("\n\t\t\t\t\tEnter Marks of Computer out of 100 : ");
+        scanf("%d", &s.cse);
+    }
     fflush(stdin);
+
     printf("\n\t\t\t\t\tEnter Marks of Science out of 100 : ");
     scanf("%d", &s.sci);
+
+    while(!marks_validator(s.sci)) {
+        printf("\n\t\t\t\t\tInvalid marks ...\n");
+        printf("\n\t\t\t\t\tEnter marks again\n");
+        fflush(stdin);
+        printf("\n\t\t\t\t\tEnter Marks of Science out of 100 : ");
+        scanf("%d", &s.sci);
+    }
     fflush(stdin);
 
     sum = s.maths + s.eng + s.cse + s.sci;
@@ -393,6 +471,15 @@ void modify() {
             fflush(stdin);
             printf("\n\t\t\t\t\tEnter Student name : ");
             gets(s.name);
+            while(!name_validation(s.name)) {
+
+                printf("\n\t\t\t\t\tInvalid Name !!!\n");
+                printf("\n\t\t\t\t\tEnter again \n");
+                fflush(stdin);
+                printf("\n\t\t\t\t\tEnter Student name : ");
+                gets(s.name);
+
+            }
             fflush(stdin);
             printf("\n\t\t\t\t\tEnter Phone No : ");
             gets(s.phoneno);
@@ -413,15 +500,50 @@ void modify() {
             fflush(stdin);
             printf("\n\t\t\t\t\tEnter Marks of Maths out of 100 : ");
             scanf("%d", &s.maths);
+
+            while(!marks_validator(s.maths)) {
+                printf("\n\t\t\t\t\tInvalid marks ...\n");
+                printf("\n\t\t\t\t\tEnter marks again\n");
+                fflush(stdin);
+                printf("\n\t\t\t\t\tEnter Marks of Maths out of 100 : ");
+                scanf("%d", &s.maths);
+            }
             fflush(stdin);
+
             printf("\n\t\t\t\t\tEnter Marks of English out of 100 : ");
             scanf("%d", &s.eng);
+
+            while(!marks_validator(s.eng)) {
+                printf("\n\t\t\t\t\tInvalid marks ...\n");
+                printf("\n\t\t\t\t\tEnter marks again\n");
+                fflush(stdin);
+                printf("\n\t\t\t\t\tEnter Marks of English out of 100 : ");
+                scanf("%d", &s.eng);
+            }
             fflush(stdin);
+
             printf("\n\t\t\t\t\tEnter Marks of Computer out of 100 : ");
             scanf("%d", &s.cse);
+
+            while(!marks_validator(s.cse)) {
+                printf("\n\t\t\t\t\tInvalid marks ...\n");
+                printf("\n\t\t\t\t\tEnter marks again\n");
+                fflush(stdin);
+                printf("\n\t\t\t\t\tEnter Marks of Computer out of 100 : ");
+                scanf("%d", &s.cse);
+            }
             fflush(stdin);
+
             printf("\n\t\t\t\t\tEnter Marks of Science out of 100 : ");
             scanf("%d", &s.sci);
+
+            while(!marks_validator(s.sci)) {
+                printf("\n\t\t\t\t\tInvalid marks ...\n");
+                printf("\n\t\t\t\t\tEnter marks again\n");
+                fflush(stdin);
+                printf("\n\t\t\t\t\tEnter Marks of Science out of 100 : ");
+                scanf("%d", &s.sci);
+            }
             fflush(stdin);
 
             sum = s.maths + s.eng + s.cse + s.sci;
@@ -510,16 +632,6 @@ void delete_record(){
 }
 
 
-// function for swaping record while sorting
-void swap(struct student stu[], int i, int temp) {
-
-    struct student t;
-
-    t = stu[i];
-    stu[i] = stu[temp];
-    stu[temp] = t;
-}
-
 
 
 // function for sorting the record on display
@@ -529,8 +641,7 @@ void sort() {
     int k = 1;
     int c = 0;
 
-    struct student stu[100];
-    int t;
+    struct student stu[100], t;
 
 
     // counting and storing all record in a struct student array
@@ -545,13 +656,12 @@ void sort() {
 
         for(int j = i + 1; j < c; j++) {
             if(stu[i].rollno > stu[j].rollno) {
-                t = j;
+                t = stu[i];
+                stu[i] = stu[j];
+                stu[j] = t;
             }
         }
 
-        if(i != t) {
-            swap(stu, i, t);
-        }
 
     }
 
